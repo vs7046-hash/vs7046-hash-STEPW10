@@ -1,0 +1,58 @@
+import java.util.*;
+
+class Account {
+    String id;
+    int balance;
+
+    Account(String id, int balance) {
+        this.id = id;
+        this.balance = balance;
+    }
+
+    String withdraw(int amount) {
+        if (this instanceof Savings && balance - amount < 1000)
+            return id + " rejected: minimum balance 1000";
+        if (this instanceof Current && balance - amount < -5000)
+            return id + " rejected: overdraft limit 5000";
+        balance -= amount;
+        return id + " balance " + balance;
+    }
+}
+
+class Savings extends Account {
+    Savings(String id, int balance) {
+        super(id, balance);
+    }
+}
+
+class Current extends Account {
+    Current(String id, int balance) {
+        super(id, balance);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Map<String, Account> accounts = new HashMap<>();
+
+        while (sc.hasNext()) {
+            String op = sc.next();
+            if (op.equals("Savings")) {
+                String id = sc.next();
+                accounts.put(id, new Savings(id, sc.nextInt()));
+            } else if (op.equals("Current")) {
+                String id = sc.next();
+                accounts.put(id, new Current(id, sc.nextInt()));
+            } else if (op.equals("WITHDRAW")) {
+                String id = sc.next();
+                int amount = sc.nextInt();
+                if (!accounts.containsKey(id))
+                    System.out.println("Account not found");
+                else
+                    System.out.println(accounts.get(id).withdraw(amount));
+            }
+        }
+        sc.close();
+    }
+}
