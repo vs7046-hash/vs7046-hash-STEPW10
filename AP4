@@ -1,0 +1,41 @@
+class Node {
+    String data;
+    Node prev;
+    Node next;
+
+    public Node(String data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
+class TrainDoublyLinkedList {
+    Node head;
+    Node tail;
+
+    public void addLast(String name) {
+        Node newNode = new Node(name);
+        if (head == null) {
+            head = tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+    }
+
+    public void remove(String name) {
+        Node current = head;
+        while (current != null) {
+            if (current.data.equals(name)) {
+                if (current == head && current == tail) {
+                    head = null;
+                    tail = null;
+                } else if (current == head) {
+                    head = head.next;
+                    head.prev = null;
+                } else if (current == tail) {
+                    tail = tail.prev;
+                    tail.next = null;
+                } else
