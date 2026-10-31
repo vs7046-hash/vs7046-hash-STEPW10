@@ -1,0 +1,77 @@
+import java.util.*;
+
+interface Chargeable {
+    void charge();
+}
+
+class Vehicle {
+    String passNumber;
+    String owner;
+    String type;
+    int fee;
+
+    Vehicle(String type, String passNumber, String owner) {
+        this.type = type;
+        this.passNumber = passNumber;
+        this.owner = owner;
+        fee = type.equals("Bike") || type.equals("EBike") ? 300 : 1000;
+    }
+}
+
+class ElectricBike extends Vehicle implements Chargeable {
+    ElectricBike(String id, String owner) {
+        super("EBike", id, owner);
+    }
+
+    public void charge() {
+        System.out.println(passNumber + " charging bay allotted");
+    }
+}
+
+class ElectricCar extends Vehicle implements Chargeable {
+    ElectricCar(String id, String owner) {
+        super("ECar", id, owner);
+    }
+
+    public void charge() {
+        System.out.println(passNumber + " charging bay allotted");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Map<String, Vehicle> vehicles = new HashMap<>();
+
+        while (sc.hasNext()) {
+            String op = sc.next();
+            if (op.equals("PASS")) {
+                String type = sc.next();
+                String id = sc.next();
+                String owner = sc.next();
+                Vehicle v;
+
+                if (type.equals("Bike"))
+                    v = new Vehicle(type, id, owner);
+                else if (type.equals("Car"))
+                    v = new Vehicle(type, id, owner);
+                else if (type.equals("EBike"))
+                    v = new ElectricBike(id, owner);
+                else
+                    v = new ElectricCar(id, owner);
+
+                vehicles.put(id, v);
+                System.out.println(id + " (" + type + ") pass fee " + v.fee);
+            } else if (op.equals("CHARGE")) {
+                String id = sc.next();
+                Vehicle v = vehicles.get(id);
+
+                if (v instanceof Chargeable)
+                    ((Chargeable) v).charge();
+                else
+                    System.out.println(id + " rejected: charging unsupported");
+            }
+        }
+        sc.close();
+    }
+}
