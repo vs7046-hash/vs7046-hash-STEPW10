@@ -1,0 +1,56 @@
+import java.util.*;
+
+class Payslip {
+    String name;
+    String type;
+    int pay;
+
+    Payslip(String name, String type, int pay) {
+        this.name = name;
+        this.type = type;
+        this.pay = pay;
+    }
+
+    public String toString() {
+        return "Payslip[name=" + name + ", type=" + type + ", pay=" + pay + "]";
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        List<Payslip> payslips = new ArrayList<>();
+
+        while (sc.hasNext()) {
+            String type = sc.next();
+            String name = sc.next();
+            int pay;
+
+            if (type.equals("FullTime")) {
+                pay = sc.nextInt();
+            } else if (type.equals("PartTime")) {
+                pay = sc.nextInt() * sc.nextInt();
+            } else {
+                pay = sc.nextInt();
+            }
+
+            payslips.add(new Payslip(name, type, pay));
+        }
+
+        int total = 0;
+        Payslip topper = null;
+
+        for (Payslip p : payslips) {
+            System.out.println(p);
+            total += p.pay;
+            if (topper == null || p.pay > topper.pay)
+                topper = p;
+        }
+
+        System.out.println("Total " + total);
+        if (topper != null)
+            System.out.println("top earner " + topper.name);
+
+        sc.close();
+    }
+}
