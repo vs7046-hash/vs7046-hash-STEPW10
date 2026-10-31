@@ -1,0 +1,57 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        List<String> names = new ArrayList<>();
+        List<int[]> marks = new ArrayList<>();
+
+        while (sc.hasNextLine()) {
+            String line = sc.nextLine().trim();
+            if (line.isEmpty()) continue;
+
+            String[] parts = line.split("\\s+", 2);
+            String name = parts[0];
+            String[] nums = parts[1].replaceAll("[\\[\\],]", "").trim().split("\\s+");
+
+            names.add(name);
+            marks.add(new int[]{
+                Integer.parseInt(nums[0]),
+                Integer.parseInt(nums[1]),
+                Integer.parseInt(nums[2])
+            });
+        }
+
+        int[] subjectTotals = new int[3];
+        int maxTotal = -1;
+        String topper = "";
+        List<Integer> totals = new ArrayList<>();
+
+        for (int i = 0; i < marks.size(); i++) {
+            int total = 0;
+            for (int j = 0; j < 3; j++) {
+                total += marks.get(i)[j];
+                subjectTotals[j] += marks.get(i)[j];
+            }
+            totals.add(total);
+            if (total > maxTotal) {
+                maxTotal = total;
+                topper = names.get(i);
+            }
+        }
+
+        System.out.print("Totals ");
+        for (int i = 0; i < names.size(); i++) {
+            if (i > 0) System.out.print(", ");
+            System.out.print(names.get(i) + " " + totals.get(i));
+        }
+
+        System.out.printf("%naverages %.2f, %.2f, %.2f%n",
+            (double) subjectTotals[0] / marks.size(),
+            (double) subjectTotals[1] / marks.size(),
+            (double) subjectTotals[2] / marks.size());
+
+        System.out.println("topper " + topper + " (" + maxTotal + ")");
+        sc.close();
+    }
+}
